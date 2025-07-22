@@ -162,11 +162,28 @@
         .action-button {
             border: 2px solid white;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
         .action-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+        }
+
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .action-button:hover::before {
+            left: 100%;
         }
 
         /* Thumbnail Styles */
@@ -186,9 +203,124 @@
                 height: 70vh;
             }
         }
+
+        /* Side Menu Styles */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background-color: #181411;
+            z-index: 100;
+            transition: transform 0.3s ease;
+            border-right: 1px solid #333;
+        }
+
+        .side-menu.open {
+            transform: translateX(300px);
+        }
+
+        .side-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 99;
+            display: none;
+        }
+
+        .side-menu.open ~ .side-menu-overlay {
+            display: block;
+        }
+
+        /* Popup Confirmation Styles */
+        .confirmation-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .confirmation-content {
+            background-color: #1e1a16;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 90%;
+            border: 2px solid white;
+            text-align: center;
+        }
+
+        .confirmation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .confirmation-button {
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .confirm-btn {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .cancel-btn {
+            background-color: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+        }
+
+        .confirmation-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .confirmation-button:hover::before {
+            left: 100%;
+        }
+
+        /* Menu Button Animation */
+        #menu-toggle {
+            transition: all 0.3s ease;
+        }
+
+        #menu-toggle.active {
+            transform: rotate(90deg);
+        }
     </style>
 </head>
 <body class="relative">
+    <!-- Side Menu -->
+    <div class="side-menu" id="sideMenu">
+        <!-- Empty side menu content as requested -->
+    </div>
+
+    <!-- Side Menu Overlay -->
+    <div class="side-menu-overlay" id="sideMenuOverlay"></div>
+
     <!-- Header -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-[#181411] bg-opacity-90 backdrop-blur-sm border-b border-gray-800">
         <div class="container mx-auto px-4 py-3 flex items-center justify-between">
@@ -219,6 +351,18 @@
         </div>
     </header>
 
+    <!-- Confirmation Popup -->
+    <div class="confirmation-popup" id="confirmationPopup">
+        <div class="confirmation-content">
+            <h3 class="text-xl font-bold mb-4" id="confirmation-title">Leaving Website</h3>
+            <p id="confirmation-message">You are about to leave this website. Are you sure you want to continue?</p>
+            <div class="confirmation-buttons">
+                <button class="confirmation-button cancel-btn" id="cancelButton">Cancel</button>
+                <button class="confirmation-button confirm-btn" id="confirmButton">Continue</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <main class="pt-16">
         <!-- Game Logo Section with Rain Effect -->
@@ -229,12 +373,12 @@
                 </div>
                 
                 <div class="flex flex-col sm:flex-row justify-center gap-6">
-                    <button onclick="prepareLink('https://itch.io')" class="action-button flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-lg">
+                    <button onclick="showConfirmation('https://itch.io')" class="action-button flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-lg">
                         <img src="https://static.itch.io/images/itchio-textless-black.svg" alt="itch.io" class="h-6">
                         <span id="play-text">Play The Game</span>
                     </button>
                     
-                    <button onclick="prepareLink('https://discord.gg')" class="action-button flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-lg">
+                    <button onclick="showConfirmation('https://discord.gg')" class="action-button flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
                             <path d="M119.83,56A52,52,0,0,0,76,12a12,12,0,0,0-12,12,28,28,0,0,0,28,28,12,12,0,0,0,12-12,52,52,0,0,0-52-52A76.08,76.08,0,0,0,12,76a52,52,0,0,0,44,51.83V184a36,36,0,0,0,36,36h16a36,36,0,0,0,36-36V128h-4a28,28,0,0,1-28-28,12,12,0,0,1,12-12,28,28,0,0,1,28,28h4a36,36,0,0,0-36-36H92A36,36,0,0,0,56,128v36a12,12,0,0,0,12,12h4v20a12,12,0,0,1-12,12H76a12,12,0,0,1-12-12V152a76.08,76.08,0,0,1-64-76A124,124,0,0,1,119.83,56Z"></path>
                         </svg>
@@ -266,23 +410,23 @@
                 <h2 class="text-white text-3xl md:text-4xl font-bold leading-tight tracking-[-0.015em] px-4 pb-8 text-center" id="screenshots-text">Screenshots</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
                     <div class="flex flex-col gap-3 screenshot-thumbnail" data-index="0">
-                        <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1511044568932-338cba0ad803?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')"></div>
+                        <div class="w-full bg-center bg-no-repeat aspect-[16/9] bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1511044568932-338cba0ad803?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')"></div>
                         <p class="text-white text-sm text-center" id="caption1">Explore mysterious lands</p>
                     </div>
                     <div class="flex flex-col gap-3 screenshot-thumbnail" data-index="1">
-                        <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80')"></div>
+                        <div class="w-full bg-center bg-no-repeat aspect-[16/9] bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80')"></div>
                         <p class="text-white text-sm text-center" id="caption2">Battle fierce enemies</p>
                     </div>
                     <div class="flex flex-col gap-3 screenshot-thumbnail" data-index="2">
-                        <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1536599424071-0b215a388ba7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80')"></div>
+                        <div class="w-full bg-center bg-no-repeat aspect-[16/9] bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1536599424071-0b215a388ba7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80')"></div>
                         <p class="text-white text-sm text-center" id="caption3">Solve ancient puzzles</p>
                     </div>
                     <div class="flex flex-col gap-3 screenshot-thumbnail" data-index="3">
-                        <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')"></div>
+                        <div class="w-full bg-center bg-no-repeat aspect-[16/9] bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')"></div>
                         <p class="text-white text-sm text-center" id="caption4">Discover hidden treasures</p>
                     </div>
                     <div class="flex flex-col gap-3 screenshot-thumbnail" data-index="4">
-                        <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')"></div>
+                        <div class="w-full bg-center bg-no-repeat aspect-[16/9] bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')"></div>
                         <p class="text-white text-sm text-center" id="caption5">Unlock powerful abilities</p>
                     </div>
                 </div>
@@ -344,7 +488,9 @@
                 caption5: "Unlock powerful abilities",
                 privacy: "Privacy Policy",
                 contact: "Contact Us",
-                copyright: "© 2024 All Rights Reserved"
+                copyright: "© 2024 All Rights Reserved",
+                leavingTitle: "Leaving Website",
+                leavingMessage: "You are about to leave this website. Are you sure you want to continue?"
             },
             id: {
                 play: "Mainkan Game",
@@ -358,52 +504,17 @@
                 caption5: "Buka kemampuan kuat",
                 privacy: "Kebijakan Privasi",
                 contact: "Hubungi Kami",
-                copyright: "© 2024 Hak Cipta Dilindungi"
+                copyright: "© 2024 Hak Cipta Dilindungi",
+                leavingTitle: "Keluar dari Website",
+                leavingMessage: "Anda akan meninggalkan website ini. Apakah Anda yakin ingin melanjutkan?"
             }
         };
 
         let currentLanguage = 'en';
         let currentGalleryIndex = 0;
         let isGalleryOpen = false;
-
-        // Gallery Data
-        const galleryData = [
-            {
-                image: "https://images.unsplash.com/photo-1511044568932-338cba0ad803?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                caption: {
-                    en: "Explore mysterious lands",
-                    id: "Jelajahi tanah misterius"
-                }
-            },
-            {
-                image: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80",
-                caption: {
-                    en: "Battle fierce enemies",
-                    id: "Lawan musuh yang ganas"
-                }
-            },
-            {
-                image: "https://images.unsplash.com/photo-1536599424071-0b215a388ba7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80",
-                caption: {
-                    en: "Solve ancient puzzles",
-                    id: "Selesaikan teka-teki kuno"
-                }
-            },
-            {
-                image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                caption: {
-                    en: "Discover hidden treasures",
-                    id: "Temukan harta karun tersembunyi"
-                }
-            },
-            {
-                image: "https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                caption: {
-                    en: "Unlock powerful abilities",
-                    id: "Buka kemampuan kuat"
-                }
-            }
-        ];
+        let currentLink = '';
+        let isMenuOpen = false;
 
         // Change language
         function changeLanguage(lang) {
@@ -618,18 +729,49 @@
             });
         }
 
-        // External link popup
-        let currentLink = '';
-
-        function prepareLink(link) {
+        // Show confirmation popup
+        function showConfirmation(link) {
             currentLink = link;
-            // Show your existing popup here
-            // showPopup();
+            document.getElementById('confirmationPopup').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            
+            // Update popup text based on current language
+            document.getElementById('confirmation-title').textContent = translations[currentLanguage].leavingTitle;
+            document.getElementById('confirmation-message').textContent = translations[currentLanguage].leavingMessage;
         }
 
+        // Close confirmation popup
+        function closeConfirmation() {
+            document.getElementById('confirmationPopup').style.display = 'none';
+            document.body.style.overflow = '';
+            currentLink = '';
+        }
+
+        // Proceed to external link
         function proceedToLink() {
             if (currentLink) {
                 window.location.href = currentLink;
+            }
+        }
+
+        // Toggle side menu
+        function toggleSideMenu() {
+            isMenuOpen = !isMenuOpen;
+            document.getElementById('sideMenu').classList.toggle('open');
+            document.getElementById('sideMenuOverlay').style.display = isMenuOpen ? 'block' : 'none';
+            document.getElementById('menu-toggle').classList.toggle('active');
+            
+            if (isMenuOpen) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close side menu when clicking outside
+        function closeSideMenuOnClickOutside(e) {
+            if (isMenuOpen && !document.getElementById('sideMenu').contains(e.target) {
+                toggleSideMenu();
             }
         }
 
@@ -669,7 +811,59 @@
                     document.getElementById('language-dropdown').classList.add('hidden');
                 }
             });
+
+            // Confirmation popup buttons
+            document.getElementById('confirmButton').addEventListener('click', proceedToLink);
+            document.getElementById('cancelButton').addEventListener('click', closeConfirmation);
+
+            // Side menu toggle
+            document.getElementById('menu-toggle').addEventListener('click', toggleSideMenu);
+            
+            // Close side menu when clicking overlay
+            document.getElementById('sideMenuOverlay').addEventListener('click', toggleSideMenu);
+            
+            // Close side menu when clicking anywhere outside
+            document.addEventListener('click', closeSideMenuOnClickOutside);
         });
+
+        // Gallery Data
+        const galleryData = [
+            {
+                image: "https://images.unsplash.com/photo-1511044568932-338cba0ad803?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                caption: {
+                    en: "Explore mysterious lands",
+                    id: "Jelajahi tanah misterius"
+                }
+            },
+            {
+                image: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80",
+                caption: {
+                    en: "Battle fierce enemies",
+                    id: "Lawan musuh yang ganas"
+                }
+            },
+            {
+                image: "https://images.unsplash.com/photo-1536599424071-0b215a388ba7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80",
+                caption: {
+                    en: "Solve ancient puzzles",
+                    id: "Selesaikan teka-teki kuno"
+                }
+            },
+            {
+                image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                caption: {
+                    en: "Discover hidden treasures",
+                    id: "Temukan harta karun tersembunyi"
+                }
+            },
+            {
+                image: "https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                caption: {
+                    en: "Unlock powerful abilities",
+                    id: "Buka kemampuan kuat"
+                }
+            }
+        ];
     </script>
 </body>
 </html>
