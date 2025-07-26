@@ -3,60 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameX</title>
+    <title>Nocturn - A Dark Fantasy Adventure</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'nocturn-dark': '#0a0807',
+                        'nocturn-purple': '#3a1c5d',
+                        'nocturn-accent': '#8a4fff',
+                    },
+                    fontFamily: {
+                        'space': ['Space Grotesk', 'sans-serif'],
+                        'cinzel': ['Cinzel', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* Main Styles */
+        /* Custom Styles */
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background-color: #181411;
-            color: white;
+            background-color: #0a0807;
+            color: #e0d6ff;
             overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(58, 28, 93, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(58, 28, 93, 0.15) 0%, transparent 20%);
+        }
+
+        .nocturn-gradient {
+            background: linear-gradient(135deg, #1a0c2e 0%, #0a0807 50%, #1a0c2e 100%);
+        }
+
+        .nocturn-border {
+            border: 1px solid rgba(138, 79, 255, 0.3);
+        }
+
+        .nocturn-border-thick {
+            border: 2px solid rgba(138, 79, 255, 0.5);
+        }
+
+        .nocturn-glow {
+            box-shadow: 0 0 15px rgba(138, 79, 255, 0.5);
+        }
+
+        .nocturn-glow-hover:hover {
+            box-shadow: 0 0 25px rgba(138, 79, 255, 0.8);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 10px rgba(138, 79, 255, 0.7);
         }
 
         /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
-        @keyframes falling {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-        
-        @keyframes rain {
-            0% { transform: translateY(-100px) translateX(0); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(100vh) translateX(20px); opacity: 0; }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
         }
 
-        /* Paper Animation */
-        .paper {
-            position: absolute;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><rect width="18" height="18" x="1" y="1" fill="none" stroke="%23ffffff" stroke-width="1"/></svg>');
-            background-size: contain;
-            width: 20px;
-            height: 20px;
-            animation: falling linear infinite;
-            z-index: 10;
-            pointer-events: none;
-        }
-        
-        /* Rain Animation */
-        .raindrop {
-            position: absolute;
-            width: 1px;
-            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.6));
-            animation: rain linear infinite;
-            pointer-events: none;
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
         }
 
-        /* Gallery Popup Styles */
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .animate-pulse {
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0807;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8a4fff;
+            border-radius: 4px;
+        }
+
+        /* Section Styles */
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Gallery Styles */
         .gallery-popup {
             display: none;
             position: fixed;
@@ -77,7 +138,7 @@
             max-width: 1000px;
             height: 80vh;
             background: #000;
-            border: 2px solid #fff;
+            border: 2px solid #8a4fff;
             border-radius: 10px;
             overflow: hidden;
         }
@@ -106,7 +167,7 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(138, 79, 255, 0.7);
             color: white;
             border: none;
             width: 40px;
@@ -119,7 +180,7 @@
         }
         
         .gallery-popup-close:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(138, 79, 255, 0.9);
         }
         
         .gallery-popup-pagination {
@@ -143,268 +204,392 @@
         }
         
         .gallery-popup-dot.active {
-            background: white;
+            background: #8a4fff;
             transform: scale(1.2);
         }
 
-        /* Section Styles */
-        .section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Button Styles */
-        .action-button {
-            border: 2px solid white;
-            transition: all 0.3s ease;
-        }
-        
-        .action-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(255,255,255,0.1);
-        }
-
-        /* Thumbnail Styles */
-        .screenshot-thumbnail {
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .screenshot-thumbnail:hover {
-            transform: scale(1.03);
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .gallery-popup-content {
-                width: 95%;
-                height: 70vh;
-            }
-        }
-
-        /* Side Menu Styles */
-        .side-menu {
-            position: fixed;
-            top: 0;
-            left: -300px;
-            width: 300px;
-            height: 100vh;
-            background-color: #181411;
-            z-index: 100;
-            transition: transform 0.3s ease;
-            border-right: 1px solid #333;
-        }
-
-        .side-menu.open {
-            transform: translateX(300px);
-        }
-
-        /* Popup Confirmation Styles */
-        .confirmation-popup {
-            display: none;
-            position: fixed;
+        /* Trailer Overlay */
+        .trailer-overlay {
+            position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .confirmation-content {
-            background-color: #1e1a16;
-            padding: 2rem;
-            border-radius: 10px;
-            max-width: 400px;
-            width: 90%;
-            border: 2px solid white;
-            text-align: center;
-        }
-
-        .confirmation-buttons {
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 8, 7, 0.7);
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .confirmation-button {
-            padding: 0.5rem 1.5rem;
-            border-radius: 5px;
+            opacity: 1;
+            transition: opacity 0.3s ease;
             cursor: pointer;
+        }
+        
+        .trailer-overlay:hover {
+            opacity: 0.9;
+        }
+
+        /* Features */
+        .feature-card {
             transition: all 0.3s ease;
+            background: rgba(26, 12, 46, 0.5);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(26, 12, 46, 0.7);
         }
 
-        .confirm-btn {
-            background-color: #fff;
-            color: #000;
-        }
-
-        .cancel-btn {
-            background-color: transparent;
-            border: 1px solid #fff;
-            color: #fff;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .gallery-popup-content {
+                width: 95%;
+                height: 60vh;
+            }
+            
+            .trailer-container {
+                padding: 0;
+            }
         }
     </style>
 </head>
 <body class="relative">
-    <!-- Side Menu -->
-    <div class="side-menu" id="sideMenu">
-        <!-- Empty side menu content as requested -->
-    </div>
-
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-[#181411] bg-opacity-90 backdrop-blur-sm border-b border-gray-800">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-nocturn-dark bg-opacity-90 backdrop-blur-sm nocturn-border-b">
         <div class="container mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <button id="menu-toggle" class="text-white focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-                <div class="flex items-center gap-2 cursor-pointer" id="logo-refresh">
-                    <img src="logostudio.png" alt="Studio Logo" class="w-8 h-8 rounded-full">
-                    <span class="text-white font-bold">GameX</span>
-                </div>
+                <a href="#" class="flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-full bg-nocturn-purple flex items-center justify-center">
+                        <i class="fas fa-moon text-nocturn-accent"></i>
+                    </div>
+                    <span class="text-white font-bold text-xl font-cinzel">NOCTURN</span>
+                </a>
             </div>
             
-            <div class="relative">
-                <button id="language-toggle" class="text-white flex items-center gap-1 px-3 py-1 rounded hover:bg-gray-800">
-                    <span id="current-language">EN</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-                <div id="language-dropdown" class="absolute right-0 mt-2 w-32 bg-[#181411] border border-gray-700 rounded shadow-lg hidden z-50">
-                    <a href="#" class="block px-4 py-2 text-white hover:bg-gray-800" data-lang="en">English</a>
-                    <a href="#" class="block px-4 py-2 text-white hover:bg-gray-800" data-lang="id">Indonesia</a>
-                </div>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#about" class="text-gray-300 hover:text-white transition">About</a>
+                <a href="#features" class="text-gray-300 hover:text-white transition">Features</a>
+                <a href="#screenshots" class="text-gray-300 hover:text-white transition">Screenshots</a>
+                <a href="#trailer" class="text-gray-300 hover:text-white transition">Trailer</a>
+            </div>
+            
+            <div>
+                <a href="https://tenebrous-nexus-game-dev.itch.io/nocturn" target="_blank" class="px-5 py-2 bg-nocturn-accent text-white rounded-lg hover:bg-purple-600 transition flex items-center gap-2 nocturn-glow-hover">
+                    <i class="fas fa-gamepad"></i>
+                    Play Now
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- Confirmation Popup -->
-    <div class="confirmation-popup" id="confirmationPopup">
-        <div class="confirmation-content">
-            <h3 class="text-xl font-bold mb-4" id="confirmation-title">Leaving Website</h3>
-            <p id="confirmation-message">You are about to leave this website. Are you sure you want to continue?</p>
-            <div class="confirmation-buttons">
-                <button class="confirmation-button cancel-btn" id="cancelButton">Cancel</button>
-                <button class="confirmation-button confirm-btn" id="confirmButton">Continue</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <main class="pt-16">
-        <!-- Game Logo Section with Rain Effect -->
-        <section id="section1" class="section">
-            <div class="max-w-4xl mx-auto px-4 text-center">
-                <div class="mb-12">
-                    <img src="gameslogo.png" alt="Game Logo" class="mx-auto max-w-[300px] w-full h-auto">
+    <!-- Hero Section -->
+    <section id="hero" class="section nocturn-gradient relative">
+        <div class="absolute inset-0 z-0 opacity-20" style="background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1794&q=80'); background-size: cover;"></div>
+        
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="max-w-3xl mx-auto">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 font-cinzel text-white animate-fade-in">
+                    <span class="text-glow">NOCTURN</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto animate-fade-in" style="animation-delay: 0.2s;">
+                    Embark on a dark fantasy journey through mysterious lands filled with ancient secrets and dangerous creatures
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in" style="animation-delay: 0.4s;">
+                    <a href="https://tenebrous-nexus-game-dev.itch.io/nocturn" target="_blank" class="px-8 py-4 bg-nocturn-accent text-white rounded-lg text-lg font-medium flex items-center justify-center gap-3 hover:bg-purple-600 transition nocturn-glow-hover">
+                        <i class="fas fa-play-circle"></i>
+                        Play on itch.io
+                    </a>
+                    
+                    <a href="https://discord.gg" target="_blank" class="px-8 py-4 bg-nocturn-dark text-white rounded-lg text-lg font-medium flex items-center justify-center gap-3 border border-nocturn-accent hover:bg-nocturn-purple transition nocturn-glow-hover">
+                        <i class="fab fa-discord"></i>
+                        Join Discord
+                    </a>
                 </div>
                 
-                <div class="flex flex-col sm:flex-row justify-center gap-6">
-                    <button onclick="showConfirmation('https://itch.io')" class="action-button flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-lg">
-                        <img src="https://static.itch.io/images/itchio-textless-black.svg" alt="itch.io" class="h-6">
-                        <span id="play-text">Play The Game</span>
-                    </button>
+                <div class="mt-16 animate-float">
+                    <i class="fas fa-chevron-down text-2xl text-nocturn-accent animate-pulse"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section bg-nocturn-dark relative">
+        <div class="container mx-auto px-4 py-16">
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="lg:w-1/2">
+                    <div class="rounded-xl overflow-hidden nocturn-border-thick nocturn-glow">
+                        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1794&q=80" alt="Nocturn Game" class="w-full h-auto">
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white font-cinzel">
+                        About <span class="text-nocturn-accent">Nocturn</span>
+                    </h2>
+                    <p class="text-gray-300 mb-6 text-lg">
+                        Nocturn is a dark fantasy action-adventure game set in a world where ancient magic and mysterious creatures collide. As the protagonist, you must navigate through treacherous landscapes, solve intricate puzzles, and battle formidable foes to uncover the secrets of a forgotten civilization.
+                    </p>
+                    <p class="text-gray-300 mb-6 text-lg">
+                        With its atmospheric environments, deep lore, and challenging gameplay, Nocturn offers an immersive experience that will test your skills and captivate your imagination.
+                    </p>
                     
-                    <button onclick="showConfirmation('https://discord.gg')" class="action-button flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
-                            <path d="M119.83,56A52,52,0,0,0,76,12a12,12,0,0,0-12,12,28,28,0,0,0,28,28,12,12,0,0,0,12-12,52,52,0,0,0-52-52A76.08,76.08,0,0,0,12,76a52,52,0,0,0,44,51.83V184a36,36,0,0,0,36,36h16a36,36,0,0,0,36-36V128h-4a28,28,0,0,1-28-28,12,12,0,0,1,12-12,28,28,0,0,1,28,28h4a36,36,0,0,0-36-36H92A36,36,0,0,0,56,128v36a12,12,0,0,0,12,12h4v20a12,12,0,0,1-12,12H76a12,12,0,0,1-12-12V152a76.08,76.08,0,0,1-64-76A124,124,0,0,1,119.83,56Z"></path>
-                        </svg>
-                        <span id="discord-text">Join Our Discord</span>
-                    </button>
+                    <div class="grid grid-cols-2 gap-4 mt-8">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-nocturn-purple flex items-center justify-center">
+                                <i class="fas fa-skull text-nocturn-accent"></i>
+                            </div>
+                            <span class="text-white">Dark Fantasy World</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-nocturn-purple flex items-center justify-center">
+                                <i class="fas fa-puzzle-piece text-nocturn-accent"></i>
+                            </div>
+                            <span class="text-white">Challenging Puzzles</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-nocturn-purple flex items-center justify-center">
+                                <i class="fas fa-swords text-nocturn-accent"></i>
+                            </div>
+                            <span class="text-white">Intense Combat</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-nocturn-purple flex items-center justify-center">
+                                <i class="fas fa-book-dead text-nocturn-accent"></i>
+                            </div>
+                            <span class="text-white">Deep Lore</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Trailer Section -->
-        <section id="section2" class="section bg-[#1e1a16]">
-            <div class="max-w-4xl mx-auto px-4">
-                <h2 class="text-white text-3xl md:text-4xl font-bold leading-tight tracking-[-0.015em] px-4 pb-8 text-center" id="trailer-text">Watch the Trailer</h2>
-                <div class="p-4">
-                    <div class="relative flex items-center justify-center bg-black bg-cover bg-center aspect-video rounded-xl p-4 overflow-hidden border-2 border-white">
-                        <button class="flex shrink-0 items-center justify-center rounded-full size-16 bg-black/40 text-white hover:bg-black/60 transition-colors border-2 border-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-                                <path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"></path>
-                            </svg>
-                        </button>
+    <!-- Features Section -->
+    <section id="features" class="section bg-nocturn-dark relative">
+        <div class="container mx-auto px-4 py-16">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white font-cinzel">
+                    Game <span class="text-nocturn-accent">Features</span>
+                </h2>
+                <p class="text-gray-300 max-w-2xl mx-auto">
+                    Discover what makes Nocturn a unique dark fantasy adventure experience
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="feature-card p-8 rounded-xl nocturn-border nocturn-glow">
+                    <div class="w-16 h-16 rounded-full bg-nocturn-purple flex items-center justify-center mb-6">
+                        <i class="fas fa-landmark text-2xl text-nocturn-accent"></i>
                     </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Atmospheric World</h3>
+                    <p class="text-gray-300">
+                        Explore beautifully crafted environments filled with gothic architecture, mysterious ruins, and haunting landscapes that tell a story of their own.
+                    </p>
+                </div>
+                
+                <div class="feature-card p-8 rounded-xl nocturn-border nocturn-glow">
+                    <div class="w-16 h-16 rounded-full bg-nocturn-purple flex items-center justify-center mb-6">
+                        <i class="fas fa-fist-raised text-2xl text-nocturn-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Dynamic Combat</h3>
+                    <p class="text-gray-300">
+                        Engage in fast-paced, skill-based combat against a variety of enemies, each with unique abilities and attack patterns.
+                    </p>
+                </div>
+                
+                <div class="feature-card p-8 rounded-xl nocturn-border nocturn-glow">
+                    <div class="w-16 h-16 rounded-full bg-nocturn-purple flex items-center justify-center mb-6">
+                        <i class="fas fa-hat-wizard text-2xl text-nocturn-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Magic System</h3>
+                    <p class="text-gray-300">
+                        Unlock and master ancient spells that allow you to manipulate the environment, solve puzzles, and defeat your enemies.
+                    </p>
+                </div>
+                
+                <div class="feature-card p-8 rounded-xl nocturn-border nocturn-glow">
+                    <div class="w-16 h-16 rounded-full bg-nocturn-purple flex items-center justify-center mb-6">
+                        <i class="fas fa-book-open text-2xl text-nocturn-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Rich Lore</h3>
+                    <p class="text-gray-300">
+                        Discover the deep history of the world through ancient texts, environmental storytelling, and interactions with mysterious characters.
+                    </p>
+                </div>
+                
+                <div class="feature-card p-8 rounded-xl nocturn-border nocturn-glow">
+                    <div class="w-16 h-16 rounded-full bg-nocturn-purple flex items-center justify-center mb-6">
+                        <i class="fas fa-cogs text-2xl text-nocturn-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Character Progression</h3>
+                    <p class="text-gray-300">
+                        Develop your character with a flexible skill tree that allows for diverse playstyles and strategies.
+                    </p>
+                </div>
+                
+                <div class="feature-card p-8 rounded-xl nocturn-border nocturn-glow">
+                    <div class="w-16 h-16 rounded-full bg-nocturn-purple flex items-center justify-center mb-6">
+                        <i class="fas fa-music text-2xl text-nocturn-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Immersive Soundtrack</h3>
+                    <p class="text-gray-300">
+                        Experience an original orchestral score that perfectly complements the game's dark and mysterious atmosphere.
+                    </p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Screenshots Section with Paper Animation -->
-        <section id="section3" class="section relative overflow-hidden">
-            <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-white text-3xl md:text-4xl font-bold leading-tight tracking-[-0.015em] px-4 pb-8 text-center" id="screenshots-text">Screenshots</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-                    <div class="flex flex-col gap-3 screenshot-thumbnail" data-index="0">
-                        <div class="w-full bg-center bg-no-repeat aspect-[16/9] bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1511044568932-338cba0ad803?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')"></div>
-                        <p class="text-white text-sm text-center" id="caption1">Explore mysterious lands</p>
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="section bg-nocturn-dark relative">
+        <div class="container mx-auto px-4 py-16">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white font-cinzel">
+                    Game <span class="text-nocturn-accent">Screenshots</span>
+                </h2>
+                <p class="text-gray-300 max-w-2xl mx-auto">
+                    Explore the hauntingly beautiful world of Nocturn through these screenshots
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="rounded-xl overflow-hidden nocturn-border-thick nocturn-glow cursor-pointer gallery-item">
+                    <img src="https://images.unsplash.com/photo-1511044568932-338cba0ad803?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Nocturn Screenshot" class="w-full h-64 object-cover">
+                    <div class="p-4 bg-nocturn-purple">
+                        <p class="text-gray-200">Mysterious ruins at twilight</p>
                     </div>
-                    <div class="flex flex-col gap-3 screenshot-thumbnail" data-index="1">
-                        <div class="w-full bg-center bg-no-repeat aspect-[16/9] bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80')"></div>
-                        <p class="text-white text-sm text-center" id="caption2">Battle fierce enemies</p>
+                </div>
+                
+                <div class="rounded-xl overflow-hidden nocturn-border-thick nocturn-glow cursor-pointer gallery-item">
+                    <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80" alt="Nocturn Screenshot" class="w-full h-64 object-cover">
+                    <div class="p-4 bg-nocturn-purple">
+                        <p class="text-gray-200">Battling shadow creatures</p>
                     </div>
-                    <div class="flex flex-col gap-3 screenshot-thumbnail" data-index="2">
-                        <div class="w-full bg-center bg-no-repeat aspect-[16/9] bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1536599424071-0b215a388ba7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80')"></div>
-                        <p class="text-white text-sm text-center" id="caption3">Solve ancient puzzles</p>
+                </div>
+                
+                <div class="rounded-xl overflow-hidden nocturn-border-thick nocturn-glow cursor-pointer gallery-item">
+                    <img src="https://images.unsplash.com/photo-1536599424071-0b215a388ba7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80" alt="Nocturn Screenshot" class="w-full h-64 object-cover">
+                    <div class="p-4 bg-nocturn-purple">
+                        <p class="text-gray-200">Ancient puzzle mechanism</p>
                     </div>
-                    <div class="flex flex-col gap-3 screenshot-thumbnail" data-index="3">
-                        <div class="w-full bg-center bg-no-repeat aspect-[16/9] bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')"></div>
-                        <p class="text-white text-sm text-center" id="caption4">Discover hidden treasures</p>
+                </div>
+                
+                <div class="rounded-xl overflow-hidden nocturn-border-thick nocturn-glow cursor-pointer gallery-item">
+                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Nocturn Screenshot" class="w-full h-64 object-cover">
+                    <div class="p-4 bg-nocturn-purple">
+                        <p class="text-gray-200">Hidden temple entrance</p>
                     </div>
-                    <div class="flex flex-col gap-3 screenshot-thumbnail" data-index="4">
-                        <div class="w-full bg-center bg-no-repeat aspect-[16/9] bg-cover rounded-xl overflow-hidden border-2 border-white" style="background-image: url('https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')"></div>
-                        <p class="text-white text-sm text-center" id="caption5">Unlock powerful abilities</p>
+                </div>
+                
+                <div class="rounded-xl overflow-hidden nocturn-border-thick nocturn-glow cursor-pointer gallery-item">
+                    <img src="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Nocturn Screenshot" class="w-full h-64 object-cover">
+                    <div class="p-4 bg-nocturn-purple">
+                        <p class="text-gray-200">Using magical abilities</p>
+                    </div>
+                </div>
+                
+                <div class="rounded-xl overflow-hidden nocturn-border-thick nocturn-glow cursor-pointer gallery-item">
+                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Nocturn Screenshot" class="w-full h-64 object-cover">
+                    <div class="p-4 bg-nocturn-purple">
+                        <p class="text-gray-200">Boss battle in the cathedral</p>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
+
+    <!-- Trailer Section -->
+    <section id="trailer" class="section bg-nocturn-dark relative">
+        <div class="container mx-auto px-4 py-16">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white font-cinzel">
+                    Game <span class="text-nocturn-accent">Trailer</span>
+                </h2>
+                <p class="text-gray-300 max-w-2xl mx-auto">
+                    Watch the official trailer to experience the dark fantasy world of Nocturn
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto nocturn-border-thick rounded-xl overflow-hidden nocturn-glow">
+                <div class="relative aspect-video bg-black">
+                    <div class="trailer-overlay">
+                        <div class="w-24 h-24 rounded-full bg-nocturn-accent flex items-center justify-center cursor-pointer">
+                            <i class="fas fa-play text-3xl text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 bg-nocturn-purple relative">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white font-cinzel">
+                Ready to Begin Your Journey?
+            </h2>
+            <p class="text-gray-200 mb-10 max-w-2xl mx-auto">
+                Download Nocturn now and immerse yourself in a dark fantasy adventure like no other
+            </p>
+            <a href="https://tenebrous-nexus-game-dev.itch.io/nocturn" target="_blank" class="px-8 py-4 bg-white text-nocturn-purple rounded-lg text-lg font-bold flex items-center justify-center gap-3 hover:bg-gray-100 transition max-w-xs mx-auto">
+                <i class="fas fa-download"></i>
+                Play on itch.io
+            </a>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="bg-[#1e1a16] py-8">
-        <div class="container mx-auto px-4 text-center">
-            <div class="flex justify-center mb-4">
-                <img src="logostudio.png" alt="Studio Logo" class="w-10 h-10 rounded-full">
+    <footer class="bg-nocturn-dark py-12 nocturn-border-t">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <a href="#" class="flex items-center gap-2">
+                        <div class="w-10 h-10 rounded-full bg-nocturn-purple flex items-center justify-center">
+                            <i class="fas fa-moon text-nocturn-accent"></i>
+                        </div>
+                        <span class="text-white font-bold text-xl font-cinzel">NOCTURN</span>
+                    </a>
+                    <p class="text-gray-400 text-sm mt-2">A dark fantasy adventure by Tenebrous Nexus</p>
+                </div>
+                
+                <div class="flex flex-col items-center md:items-end">
+                    <div class="flex gap-6 mb-6">
+                        <a href="https://twitter.com" target="_blank" class="text-gray-400 hover:text-white text-xl">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://discord.gg" target="_blank" class="text-gray-400 hover:text-white text-xl">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="https://youtube.com" target="_blank" class="text-gray-400 hover:text-white text-xl">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" class="text-gray-400 hover:text-white text-xl">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                    <p class="text-gray-400 text-sm">© 2024 Tenebrous Nexus. All rights reserved.</p>
+                </div>
             </div>
-            <p class="text-gray-400 text-sm mb-2">PT Arima Dedikasi Kreatif</p>
-            <div class="flex justify-center gap-4 mb-4">
-                <a href="#" class="text-gray-400 hover:text-white text-sm" id="privacy-text">Privacy Policy</a>
-                <a href="mailto:contact@calcatz.com" class="text-gray-400 hover:text-white text-sm" id="contact-text">Contact Us</a>
-            </div>
-            <p class="text-gray-400 text-sm" id="copyright-text">© 2024 All Rights Reserved</p>
         </div>
     </footer>
 
-    <!-- Screenshot Popup Gallery -->
+    <!-- Gallery Popup -->
     <div class="gallery-popup" id="galleryPopup">
         <div class="gallery-popup-content">
             <button class="gallery-popup-close">×</button>
             <div class="gallery-popup-image" id="galleryPopupImage"></div>
-            <p class="text-white text-sm text-center absolute bottom-12 left-0 right-0" id="galleryCaption"></p>
             
             <div class="gallery-popup-nav">
-                <button class="gallery-btn prev-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
+                <button class="gallery-btn prev-btn bg-nocturn-purple bg-opacity-70 text-white rounded-full w-12 h-12 flex items-center justify-center hover:bg-opacity-100">
+                    <i class="fas fa-chevron-left"></i>
                 </button>
-                <button class="gallery-btn next-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
+                <button class="gallery-btn next-btn bg-nocturn-purple bg-opacity-70 text-white rounded-full w-12 h-12 flex items-center justify-center hover:bg-opacity-100">
+                    <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
             
@@ -413,113 +598,42 @@
     </div>
 
     <script>
-        // Translations
-        const translations = {
-            en: {
-                play: "Play The Game",
-                discord: "Join Our Discord",
-                trailer: "Watch the Trailer",
-                screenshots: "Screenshots",
-                caption1: "Explore mysterious lands",
-                caption2: "Battle fierce enemies",
-                caption3: "Solve ancient puzzles",
-                caption4: "Discover hidden treasures",
-                caption5: "Unlock powerful abilities",
-                privacy: "Privacy Policy",
-                contact: "Contact Us",
-                copyright: "© 2024 All Rights Reserved",
-                leavingTitle: "Leaving Website",
-                leavingMessage: "You are about to leave this website. Are you sure you want to continue?"
-            },
-            id: {
-                play: "Mainkan Game",
-                discord: "Bergabung dengan Discord",
-                trailer: "Tonton Trailer",
-                screenshots: "Cuplikan Layar",
-                caption1: "Jelajahi tanah misterius",
-                caption2: "Lawan musuh yang ganas",
-                caption3: "Selesaikan teka-teki kuno",
-                caption4: "Temukan harta karun tersembunyi",
-                caption5: "Buka kemampuan kuat",
-                privacy: "Kebijakan Privasi",
-                contact: "Hubungi Kami",
-                copyright: "© 2024 Hak Cipta Dilindungi",
-                leavingTitle: "Keluar dari Website",
-                leavingMessage: "Anda akan meninggalkan website ini. Apakah Anda yakin ingin melanjutkan?"
-            }
-        };
-
-        let currentLanguage = 'en';
-        let currentGalleryIndex = 0;
-        let isGalleryOpen = false;
-        let currentLink = '';
-
         // Gallery Data
         const galleryData = [
             {
                 image: "https://images.unsplash.com/photo-1511044568932-338cba0ad803?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                caption: {
-                    en: "Explore mysterious lands",
-                    id: "Jelajahi tanah misterius"
-                }
+                caption: "Mysterious ruins at twilight"
             },
             {
                 image: "https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80",
-                caption: {
-                    en: "Battle fierce enemies",
-                    id: "Lawan musuh yang ganas"
-                }
+                caption: "Battling shadow creatures"
             },
             {
                 image: "https://images.unsplash.com/photo-1536599424071-0b215a388ba7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80",
-                caption: {
-                    en: "Solve ancient puzzles",
-                    id: "Selesaikan teka-teki kuno"
-                }
+                caption: "Ancient puzzle mechanism"
             },
             {
                 image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                caption: {
-                    en: "Discover hidden treasures",
-                    id: "Temukan harta karun tersembunyi"
-                }
+                caption: "Hidden temple entrance"
             },
             {
                 image: "https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-                caption: {
-                    en: "Unlock powerful abilities",
-                    id: "Buka kemampuan kuat"
-                }
+                caption: "Using magical abilities"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80",
+                caption: "Boss battle in the cathedral"
             }
         ];
 
-        // Change language
-        function changeLanguage(lang) {
-            currentLanguage = lang;
-            document.getElementById('current-language').textContent = lang.toUpperCase();
-            
-            // Update all text elements
-            Object.keys(translations[lang]).forEach(key => {
-                const elements = document.querySelectorAll(`[id="${key}-text"]`);
-                elements.forEach(el => {
-                    if (el) el.textContent = translations[lang][key];
-                });
-            });
-            
-            // Update gallery caption if open
-            if (isGalleryOpen) {
-                updateGalleryCaption();
-            }
-            
-            // Close dropdown
-            document.getElementById('language-dropdown').classList.add('hidden');
-        }
+        let currentGalleryIndex = 0;
+        let isGalleryOpen = false;
 
         // Initialize gallery
         function initGallery() {
             // Set up thumbnail click events
-            document.querySelectorAll('.screenshot-thumbnail').forEach((thumb, index) => {
-                thumb.addEventListener('click', () => openGallery(index));
+            document.querySelectorAll('.gallery-item').forEach((item, index) => {
+                item.addEventListener('click', () => openGallery(index));
             });
         }
 
@@ -531,7 +645,6 @@
             document.body.style.overflow = 'hidden';
             
             updateGalleryContent();
-            createPapers();
             
             // Add keyboard event listener
             document.addEventListener('keydown', handleGalleryKeyDown);
@@ -542,7 +655,6 @@
             isGalleryOpen = false;
             document.getElementById('galleryPopup').style.display = 'none';
             document.body.style.overflow = '';
-            clearPapers();
             
             document.removeEventListener('keydown', handleGalleryKeyDown);
         }
@@ -559,16 +671,8 @@
                 popupImage.style.backgroundImage = `url(${currentImage.image})`;
                 popupImage.style.opacity = '1';
                 
-                updateGalleryCaption();
                 updatePagination();
             }, 300);
-        }
-
-        // Update gallery caption
-        function updateGalleryCaption() {
-            const currentImage = galleryData[currentGalleryIndex];
-            const caption = document.getElementById('galleryCaption');
-            caption.textContent = currentImage.caption[currentLanguage] || currentImage.caption.en;
         }
 
         // Update pagination
@@ -617,130 +721,9 @@
             }
         }
 
-        // Create falling papers
-        function createPapers() {
-            clearPapers();
-            const gallery = document.getElementById('galleryPopup');
-            
-            for (let i = 0; i < 30; i++) {
-                createPaper(gallery);
-            }
-        }
-
-        function createPaper(container) {
-            const paper = document.createElement('div');
-            paper.className = 'paper';
-            
-            // Random properties
-            const size = Math.random() * 15 + 10;
-            const left = Math.random() * 100;
-            const duration = Math.random() * 10 + 5;
-            const delay = Math.random() * 5;
-            const rotation = Math.random() * 360;
-            
-            paper.style.cssText = `
-                width: ${size}px;
-                height: ${size}px;
-                left: ${left}%;
-                animation-duration: ${duration}s;
-                animation-delay: ${delay}s;
-                transform: rotate(${rotation}deg);
-            `;
-            
-            container.appendChild(paper);
-            
-            // Remove paper after animation completes
-            setTimeout(() => {
-                paper.remove();
-            }, duration * 1000);
-        }
-
-        function clearPapers() {
-            document.querySelectorAll('#galleryPopup .paper').forEach(paper => paper.remove());
-        }
-
-        // Create rain effect
-        function createRain() {
-            const section1 = document.getElementById('section1');
-            
-            for (let i = 0; i < 50; i++) {
-                createRaindrop(section1);
-            }
-            
-            setInterval(() => {
-                createRaindrop(section1);
-            }, 300);
-        }
-
-        function createRaindrop(container) {
-            const raindrop = document.createElement('div');
-            raindrop.className = 'raindrop';
-            
-            // Random properties
-            const left = Math.random() * 100;
-            const height = Math.random() * 20 + 10;
-            const duration = Math.random() * 1 + 0.5;
-            const delay = Math.random() * 2;
-            const opacity = Math.random() * 0.5 + 0.3;
-            
-            raindrop.style.cssText = `
-                left: ${left}%;
-                height: ${height}px;
-                animation-duration: ${duration}s;
-                animation-delay: ${delay}s;
-                opacity: ${opacity};
-            `;
-            
-            container.appendChild(raindrop);
-            
-            // Remove raindrop after animation completes
-            setTimeout(() => {
-                raindrop.remove();
-            }, duration * 1000);
-        }
-
-        // Refresh page when logo is clicked
-        function setupLogoRefresh() {
-            document.getElementById('logo-refresh').addEventListener('click', () => {
-                window.location.reload();
-            });
-        }
-
-        // Show confirmation popup
-        function showConfirmation(link) {
-            currentLink = link;
-            document.getElementById('confirmationPopup').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            
-            // Update popup text based on current language
-            document.getElementById('confirmation-title').textContent = translations[currentLanguage].leavingTitle;
-            document.getElementById('confirmation-message').textContent = translations[currentLanguage].leavingMessage;
-        }
-
-        // Close confirmation popup
-        function closeConfirmation() {
-            document.getElementById('confirmationPopup').style.display = 'none';
-            document.body.style.overflow = '';
-            currentLink = '';
-        }
-
-        // Proceed to external link
-        function proceedToLink() {
-            if (currentLink) {
-                window.location.href = currentLink;
-            }
-        }
-
-        // Toggle side menu
-        function toggleSideMenu() {
-            document.getElementById('sideMenu').classList.toggle('open');
-        }
-
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', () => {
             initGallery();
-            createRain();
-            setupLogoRefresh();
             
             // Set up gallery navigation
             document.querySelector('.prev-btn').addEventListener('click', prevImage);
@@ -754,31 +737,21 @@
                 }
             });
             
-            // Language switcher
-            document.getElementById('language-toggle').addEventListener('click', () => {
-                document.getElementById('language-dropdown').classList.toggle('hidden');
+            // Trailer overlay click
+            document.querySelector('.trailer-overlay').addEventListener('click', () => {
+                alert("Trailer would play here. This is a design demonstration.");
             });
-
-            document.querySelectorAll('#language-dropdown a').forEach(link => {
-                link.addEventListener('click', (e) => {
+            
+            // Smooth scrolling for navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    changeLanguage(link.dataset.lang);
+                    
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
                 });
             });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('#language-toggle') && !e.target.closest('#language-dropdown')) {
-                    document.getElementById('language-dropdown').classList.add('hidden');
-                }
-            });
-
-            // Confirmation popup buttons
-            document.getElementById('confirmButton').addEventListener('click', proceedToLink);
-            document.getElementById('cancelButton').addEventListener('click', closeConfirmation);
-
-            // Side menu toggle
-            document.getElementById('menu-toggle').addEventListener('click', toggleSideMenu);
         });
     </script>
 </body>
